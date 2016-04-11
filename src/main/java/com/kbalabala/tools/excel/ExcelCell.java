@@ -1,0 +1,93 @@
+package com.kbalabala.tools.excel;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * 数值型的只能使用Double
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface ExcelCell {
+
+    /**
+     * 解析器
+     *
+     * @return
+     */
+    public Class resolver() default Object.class;
+
+    /**
+     * 顺序 default 100
+     *
+     * @return
+     */
+    public int index();
+
+    /**
+     * 格式化
+     *
+     * @return
+     */
+    public String pattern() default "";
+
+    /**
+     * 当值为null时要显示的值 default StringUtils.EMPTY
+     * 
+     * @return
+     */
+    public String defaultValue() default "";
+
+    /**
+     * 用于验证
+     * 
+     * @return
+     */
+    public Valid valid() default @Valid();
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface Valid {
+        /**
+         * 必须与in中String相符,目前仅支持String类型
+         * 
+         * @return e.g. {"abc","123"}
+         */
+        public String[] in() default {};
+
+        /**
+         * 是否允许为空,用于验证数据 default true
+         * 
+         * @return
+         */
+        public boolean allowNull() default true;
+
+        /**
+         * Apply a "greater than" constraint to the named property , equivalent ">"
+         * 
+         * @return
+         */
+        public double gt() default Double.NaN;
+
+        /**Apply a "less than" constraint to the named property , equivalent "<"
+         * @return
+         */
+        public double lt() default Double.NaN;
+
+        /**
+         * Apply a "greater than or equal" constraint to the named property , equivalent ">="
+         * 
+         * @return
+         */
+        public double ge() default Double.NaN;
+
+        /**
+         * Apply a "less than or equal" constraint to the named property , equivalent "<="
+         * 
+         * @return
+         */
+        public double le() default Double.NaN;
+    }
+}
